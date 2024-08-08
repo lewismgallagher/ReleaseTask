@@ -25,8 +25,9 @@ namespace PatchToolService.Classes
         }
         public void Start(bool testmode)
         {
-            _filePathHelper.TestMode= testmode;
-            
+            _filePathHelper.GetFilePath(testmode);
+
+            _versionSelectionHelper.StartVersionSelectionPrompt();
         }
     }
 }

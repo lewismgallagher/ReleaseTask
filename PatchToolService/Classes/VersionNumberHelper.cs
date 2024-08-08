@@ -1,4 +1,5 @@
-﻿using PatchToolService.Interfaces;
+﻿using PatchToolService.Enums;
+using PatchToolService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,21 +25,32 @@ namespace PatchToolService.Classes
             return Major + "." + Minor + "." + Patch;
         }
 
+        public string RunRelease(ReleaseTypeEnum releaseType, string version)
+        {
+            if (releaseType == ReleaseTypeEnum.Major) return GetMajorReleaseVersion(version);
+
+            if (releaseType == ReleaseTypeEnum.Minor)return GetMinorReleaseVersion(version);
+
+            if (releaseType == ReleaseTypeEnum.Patch)return GetPatchReleaseVersion(version);
+
+            return "";
+        }
+
         public string GetMinorReleaseVersion(string version)
         {
-                SplitVersionNumber(version);
+            SplitVersionNumber(version);
 
-                Minor = Minor + 1;
-                Patch = 0;
+            Minor = Minor + 1;
+            Patch = 0;
 
-                return Major + "." + Minor + "." + Patch;
+            return Major + "." + Minor + "." + Patch;
         }
 
         public string GetPatchReleaseVersion(string version)
         {
             SplitVersionNumber(version);
 
-            Patch = Patch+ 1;
+            Patch = Patch + 1;
 
             return Major + "." + Minor + "." + Patch;
         }

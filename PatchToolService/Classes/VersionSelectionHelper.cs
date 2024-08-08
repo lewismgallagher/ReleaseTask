@@ -1,4 +1,5 @@
-﻿using PatchToolService.Interfaces;
+﻿using PatchToolService.Enums;
+using PatchToolService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,11 +19,8 @@ namespace PatchToolService.Classes
 
         private readonly IFilePathHelper _filePathHelper;
 
-        public bool TestMode { get; set; }
+        public ReleaseTypeEnum ReleaseType { get; set; }
 
-        public string input { get; set; }
-        public string FilePath { get; set; }
-        public bool ValidChoiceAccepted { get; set; }
 
         public VersionSelectionHelper(IJSONManipulation jSONManipulation, IVersionNumberHelper versionNumberHelper, IFilePathHelper filePathHelper)
         {
@@ -31,72 +29,42 @@ namespace PatchToolService.Classes
             _filePathHelper = filePathHelper;
         }
 
+        public void InputCheck(string input)
+        {
+            ReleaseType = ReleaseTypeEnum.None;
+            string lowerCaseInput = input.ToLower();
 
-        public void VersionSelectionPrompt()
+            if (lowerCaseInput == "major") { ReleaseType = ReleaseTypeEnum.Major; } 
+            if(lowerCaseInput == "minor") { ReleaseType = ReleaseTypeEnum.Minor; }
+            if (lowerCaseInput == "patch") { ReleaseType = ReleaseTypeEnum.Patch; }
+
+        }
+
+        public void StartVersionSelectionPrompt()
         {
             try
-            {               
+            {
+                ReleaseType = ReleaseTypeEnum.None;
 
+                Console.WriteLine("Please enter Major, Minor or Patch based on what release you intend to do.");
+                string input = Console.ReadLine();
 
-                if (TestMode) {
-                    FilePath = @"C:\Users\lewis\Documents\coding stuff\source\BitBucket\PatchTool\PatchToolTests\AppVersion.json;"; }
-                else {
+                InputCheck(input);
 
-                    FilePath = @"C:\Users\lewis\Documents\coding stuff\source\BitBucket\PatchTool\PatchToolService\AppVersion.json";
-                    Console.WriteLine("Please enter Major, Minor or Patch based on what release you intend to do.");
-                }
-
-
-                while (ValidChoiceAccepted == false)
+                while (ReleaseType == ReleaseTypeEnum.None)
                 {
-                    if (!TestMode) { input = Console.ReadLine().ToLower(); }
+                    Console.WriteLine("Invalid Choice");
+                    Console.WriteLine("Please enter Major, Minor or Patch based on what release you intend to do.");
 
-                    switch (input)
-                    {
-                        case "major":
-                            {
-                                ValidChoiceAccepted = true;
-
-                                var json = _jSONManipulation.DeserializeJSONFile(FilePath);
-
-                                json.Version = _versionNumberHelper.GetMajorReleaseVersion(json.Version);
-
-                                _jSONManipulation.SerializeJSONToFile(json, FilePath);
-
-                                Console.WriteLine("Major release successful.");
-                            }
-                            break;
-                        case "minor":
-                            {
-                                ValidChoiceAccepted = true;
-                                var json = _jSONManipulation.DeserializeJSONFile(FilePath);
-
-                                json.Version = _versionNumberHelper.GetMinorReleaseVersion(json.Version);
-
-                                _jSONManipulation.SerializeJSONToFile(json, FilePath);
-
-                                Console.WriteLine("Minor release successful.");
-                            }
-                            break;
-                        case "patch":
-                            {
-                                ValidChoiceAccepted = true;
-
-                                var json = _jSONManipulation.DeserializeJSONFile(FilePath);
-                                json.Version = _versionNumberHelper.GetPatchReleaseVersion(json.Version);
-
-                                _jSONManipulation.SerializeJSONToFile(json, FilePath);
-
-                                Console.WriteLine("Patch successful.");
-
-                            }
-                            break;
-                        default:
-                            Console.WriteLine("Invalid Choice");
-                            Console.WriteLine("Please enter Major, Minor or Patch based on what release you intend to do.");
-                            break;
-                    }
+                    InputCheck(input);
                 }
+
+                var json = _jSONManipulation.DeserializeJSONFile(_filePathHelper.FilePath);
+
+                json.Version = _versionNumberHelper.RunRelease(ReleaseType, json.Version);
+
+                _jSONManipulation.SerializeJSONToFile(json, _filePathHelper.FilePath);
+                Console.WriteLine(ReleaseType.ToString() +  " release successful.");
             }
             catch (Exception)
             {

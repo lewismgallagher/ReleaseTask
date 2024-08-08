@@ -11,15 +11,13 @@ namespace PatchToolService.Classes
     {
         public string FilePath { get; set; }
 
-        public bool TestMode { get; set; }
-
-        public void GetFilePath()
+        public void GetFilePath(bool testmode)
         {
-            if (TestMode)
+            if (testmode)
             {
                 FilePath = @"C:\Users\lewis\Documents\coding stuff\source\BitBucket\PatchTool\PatchToolTests\AppVersion.json";
             }
-            else FilePath = @"C:\Users\lewis\Documents\coding stuff\source\BitBucket\PatchTool\PatchToolTests\AppVersion.json";
+            else FilePath = @"C:\Users\lewis\Documents\coding stuff\source\BitBucket\PatchTool\PatchToolService\AppVersion.json";
         }
     }
 }

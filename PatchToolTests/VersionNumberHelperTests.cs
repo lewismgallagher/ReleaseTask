@@ -15,6 +15,7 @@ namespace PatchToolTests
         {
             _sut = new VersionNumberHelper();
         }
+        //TODO test new method.
 
         [Theory, ]
         [InlineData("1.2.5")]

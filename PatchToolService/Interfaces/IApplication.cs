@@ -9,7 +9,7 @@ namespace PatchToolService.Interfaces
     public interface IApplication
     {
         public bool TestMode { get; set; }
-        void Start();
+        void Start(bool TestMode);
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PatchToolService.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace PatchToolService.Interfaces
         int Minor { get; set; }
         int Patch { get; set; }
 
+        public string RunRelease(ReleaseTypeEnum releaseType, string version);
         string GetMajorReleaseVersion(string version);
 
         string GetMinorReleaseVersion(string version);

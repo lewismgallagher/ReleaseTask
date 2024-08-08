@@ -10,6 +10,7 @@ namespace PatchToolService.Interfaces
     {
         public string FilePath { get; set; }
 
-        public bool TestMode { get; set; }
+        public void GetFilePath(bool testmode);
+ 
     }
 }
