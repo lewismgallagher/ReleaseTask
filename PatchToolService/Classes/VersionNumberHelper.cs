@@ -14,7 +14,19 @@ namespace PatchToolService.Classes
         public int Minor { get; set; }
         public int Patch { get; set; }
 
-        public string GetMajorReleaseVersion(string version)
+
+
+        public string GetReleaseVersionNumber(ReleaseTypeEnum releaseType, string version)
+        {
+            if (releaseType == ReleaseTypeEnum.Major) return UpdateMajorReleaseVersion(version);
+
+            if (releaseType == ReleaseTypeEnum.Minor)return UpdateMinorReleaseVersion(version);
+
+            if (releaseType == ReleaseTypeEnum.Patch)return UpdatePatchReleaseVersion(version);
+
+            return "";
+        }
+        public string UpdateMajorReleaseVersion(string version)
         {
             SplitVersionNumber(version);
 
@@ -24,19 +36,7 @@ namespace PatchToolService.Classes
 
             return Major + "." + Minor + "." + Patch;
         }
-
-        public string RunRelease(ReleaseTypeEnum releaseType, string version)
-        {
-            if (releaseType == ReleaseTypeEnum.Major) return GetMajorReleaseVersion(version);
-
-            if (releaseType == ReleaseTypeEnum.Minor)return GetMinorReleaseVersion(version);
-
-            if (releaseType == ReleaseTypeEnum.Patch)return GetPatchReleaseVersion(version);
-
-            return "";
-        }
-
-        public string GetMinorReleaseVersion(string version)
+        public string UpdateMinorReleaseVersion(string version)
         {
             SplitVersionNumber(version);
 
@@ -46,7 +46,7 @@ namespace PatchToolService.Classes
             return Major + "." + Minor + "." + Patch;
         }
 
-        public string GetPatchReleaseVersion(string version)
+        public string UpdatePatchReleaseVersion(string version)
         {
             SplitVersionNumber(version);
 

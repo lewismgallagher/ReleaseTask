@@ -40,11 +40,20 @@ namespace PatchToolService.Classes
 
         }
 
+        public void FinishRelease()
+        {
+            var json = _jSONManipulation.DeserializeJSONFile(_filePathHelper.FilePath);
+
+            json.Version = _versionNumberHelper.GetReleaseVersionNumber(ReleaseType, json.Version);
+
+            _jSONManipulation.SerializeJSONToFile(json, _filePathHelper.FilePath);
+            Console.WriteLine(ReleaseType.ToString() + " release successful.");
+        }
+
         public void StartVersionSelectionPrompt()
         {
             try
             {
-                ReleaseType = ReleaseTypeEnum.None;
 
                 Console.WriteLine("Please enter Major, Minor or Patch based on what release you intend to do.");
                 string input = Console.ReadLine();
@@ -59,12 +68,7 @@ namespace PatchToolService.Classes
                     InputCheck(input);
                 }
 
-                var json = _jSONManipulation.DeserializeJSONFile(_filePathHelper.FilePath);
-
-                json.Version = _versionNumberHelper.RunRelease(ReleaseType, json.Version);
-
-                _jSONManipulation.SerializeJSONToFile(json, _filePathHelper.FilePath);
-                Console.WriteLine(ReleaseType.ToString() +  " release successful.");
+                FinishRelease();
             }
             catch (Exception)
             {

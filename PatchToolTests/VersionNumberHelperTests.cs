@@ -1,5 +1,6 @@
 ﻿using PatchToolService.Classes;
 using PatchToolService.Data;
+using PatchToolService.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,47 @@ namespace PatchToolTests
         {
             _sut = new VersionNumberHelper();
         }
-        //TODO test new method.
 
-        [Theory, ]
+        [Theory]
+        [InlineData(ReleaseTypeEnum.Major,"1.2.5")]
+        [InlineData(ReleaseTypeEnum.Minor,"2.7.8")]
+        [InlineData(ReleaseTypeEnum.Patch,"4.1.1")]
+        public void TestFinishReleaseMultipleParams(ReleaseTypeEnum releaseType, string version)
+        {
+            _sut.GetReleaseVersionNumber(releaseType, version);
+        }
+
+        [Theory]
+        [InlineData(ReleaseTypeEnum.Major, "44.25.1")]
+        public void TestFinishReleaseMajor(ReleaseTypeEnum releaseType, string version)
+        {
+           string releaseNumber = _sut.GetReleaseVersionNumber(releaseType, version);
+
+            Assert.Equal(releaseNumber, "45.0.0");
+
+        }
+
+        [Theory]
+        [InlineData(ReleaseTypeEnum.Minor, "44.25.1")]
+        public void TestFinishReleaseMinor(ReleaseTypeEnum releaseType, string version)
+        {
+            string releaseNumber = _sut.GetReleaseVersionNumber(releaseType, version);
+
+            Assert.Equal(releaseNumber, "44.26.0");
+
+        }
+
+        [Theory]
+        [InlineData(ReleaseTypeEnum.Patch, "44.25.1")]
+        public void TestFinishReleasePatch(ReleaseTypeEnum releaseType, string version)
+        {
+            string releaseNumber = _sut.GetReleaseVersionNumber(releaseType, version);
+
+            Assert.Equal(releaseNumber, "44.25.2");
+
+        }
+
+        [Theory]
         [InlineData("1.2.5")]
         [InlineData("9.0.4")]
         [InlineData("2.3.4")]
@@ -48,21 +87,21 @@ namespace PatchToolTests
         [Fact]
         public void TestGetMajorReleaseVersion()
         {
-            _sut.GetMajorReleaseVersion("5.2.1");
+            _sut.UpdateMajorReleaseVersion("5.2.1");
 
-            Assert.Equal("6.0.0", _sut.GetMajorReleaseVersion("5.2.1"));
+            Assert.Equal("6.0.0", _sut.UpdateMajorReleaseVersion("5.2.1"));
         }
 
         [Fact]
         public void TestGetMinorReleaseVersion()
         {
-            Assert.Equal("5.3.0", _sut.GetMinorReleaseVersion("5.2.1"));
+            Assert.Equal("5.3.0", _sut.UpdateMinorReleaseVersion("5.2.1"));
         }
 
         [Fact]
         public void TestGetPatchReleaseVersion()
         {
-            Assert.Equal("5.2.2", _sut.GetPatchReleaseVersion("5.2.1"));
+            Assert.Equal("5.2.2", _sut.UpdatePatchReleaseVersion("5.2.1"));
         }
 
 

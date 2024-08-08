@@ -13,12 +13,12 @@ namespace PatchToolService.Interfaces
         int Minor { get; set; }
         int Patch { get; set; }
 
-        public string RunRelease(ReleaseTypeEnum releaseType, string version);
-        string GetMajorReleaseVersion(string version);
+        public string GetReleaseVersionNumber(ReleaseTypeEnum releaseType, string version);
+        string UpdateMajorReleaseVersion(string version);
 
-        string GetMinorReleaseVersion(string version);
+        string UpdateMinorReleaseVersion(string version);
 
-        string GetPatchReleaseVersion(string version);
+        string UpdatePatchReleaseVersion(string version);
 
         void SplitVersionNumber(string versionNumber);
     }
