@@ -18,28 +18,20 @@ namespace PatchToolService.Classes
             SplitVersionNumber(version);
 
             Major = Major + 1;
+            Minor = 0;
+            Patch = 0;
 
             return Major + "." + Minor + "." + Patch;
         }
 
         public string GetMinorReleaseVersion(string version)
         {
-            try
-            {
                 SplitVersionNumber(version);
 
                 Minor = Minor + 1;
                 Patch = 0;
 
                 return Major + "." + Minor + "." + Patch;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-
         }
 
         public string GetPatchReleaseVersion(string version)
@@ -53,23 +45,32 @@ namespace PatchToolService.Classes
 
         public void SplitVersionNumber(string versionNumber)
         {
-
-            string[] strings = versionNumber.Split('.');
-
             try
             {
-                Major = int.Parse(strings[0]);
-                Minor = int.Parse(strings[1]);
-                Patch = int.Parse(strings[2]);
+                if (string.IsNullOrWhiteSpace(versionNumber))
+                {
+                    throw new ArgumentNullException("Error, invalid version number, version number cannot be empty.");
+                }
+
+                string[] strings = versionNumber.Split('.');
+
+                if (int.TryParse(strings[0], out int major) &&
+                  int.TryParse(strings[1], out int minor) &&
+                  int.TryParse(strings[2], out int patch))
+                {
+                    Major = major;
+                    Minor = minor;
+                    Patch = patch;
+                }
+                else throw new InvalidCastException("Error, invalid version number," +
+                    " version number could not be converted," +
+                    " please ensure the version number contains only numbers and 3 decimal places e.g. 1.2.45");
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                if (ex is InvalidCastException) { Console.WriteLine("ERROR! Version Number is in an incorrect format. " +
-                    "Please ensure the version number looks like x.x.x"); }
                 throw;
             }
         }
-
-
     }
 }

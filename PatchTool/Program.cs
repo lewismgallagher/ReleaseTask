@@ -1,27 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PatchToolService.Classes;
+using PatchToolService.Interfaces;
 
-HostApplicationBuilder builder = new HostApplicationBuilder(args);
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
-builder.Services.AddScoped<JSONManipulation,JSONManipulation>();
-builder.Services.AddScoped<VersionSelectionHelper, VersionSelectionHelper>();
-builder.Services.AddScoped<VersionNumberHelper, VersionNumberHelper>();
-
-using IHost host = builder.Build();
-
-Start(host.Services);
-
-await host.RunAsync();
-
-static void Start(IServiceProvider hostProvider)
+IHost host = Host.CreateDefaultBuilder().ConfigureServices(services =>
 {
-    using IServiceScope serviceScope = hostProvider.CreateScope();
-    IServiceProvider provider = serviceScope.ServiceProvider;
+    services.AddScoped<IJSONManipulation, JSONManipulation>();
+    services.AddScoped<IVersionNumberHelper, VersionNumberHelper>();
+    services.AddScoped<IVersionSelectionHelper, VersionSelectionHelper>();
+}).Build();
 
-    var versionSelectionHelper = provider.GetRequiredService<VersionSelectionHelper>();
 
-    versionSelectionHelper.VersionSelectionPrompt();
-}
 
-Console.ReadLine();
+var app = host.Services.GetRequiredService<IVersionSelectionHelper>();
+
+app.VersionSelectionPrompt();
+

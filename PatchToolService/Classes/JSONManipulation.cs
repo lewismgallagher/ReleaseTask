@@ -1,10 +1,11 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using PatchToolService.Data;
+using PatchToolService.Interfaces;
 
 namespace PatchToolService.Classes
 {
-    public class JSONManipulation
+    public class JSONManipulation : IJSONManipulation
     {
 
         public FullVersion DeserializeJSONFile(string filePath)
@@ -42,7 +43,7 @@ namespace PatchToolService.Classes
             {
                 if (string.IsNullOrWhiteSpace(filePath))
                 {
-                    throw new InvalidDataException("Error, No FilePath Provided, please provide a filepath.");
+                    throw new InvalidDataException("Error, no filepath provided, please provide a filepath.");
                 }
 
                 var options = new JsonSerializerOptions();
