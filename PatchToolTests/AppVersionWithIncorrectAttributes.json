@@ -1,0 +1,12 @@
+{
+  "Version5": "1.6.23",
+  "Patched": {
+    "Named": "Patch022024",
+    "Direct": "Patch022024",
+    "Ordinl": "1",
+    "Scts": [
+      "script1.sql",
+      "script2.sql"
+    ]
+  }
+}
